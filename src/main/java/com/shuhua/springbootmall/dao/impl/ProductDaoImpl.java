@@ -42,19 +42,19 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Integer createProduct(ProductRequest productRequest) {
-        String sql = "INSERT INTO product (product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES (:product_name, :category, :image_url, :price, :stock, :description, :created_date, :last_modified_date)";
+        String sql = "INSERT INTO product (product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES (:productName, :category, :imageUrl, :price, :stock, :description, :createdDate, :lastModifiedDate)";
 
         Map<String,Object> map = new HashMap<>();
-        map.put("product_name",productRequest.getProductName());
+        map.put("productName",productRequest.getProductName());
         map.put("category",productRequest.getCategory().name());
-        map.put("image_url",productRequest.getImageUrl());
+        map.put("imageUrl",productRequest.getImageUrl());
         map.put("price",productRequest.getPrice());
         map.put("stock",productRequest.getStock());
         map.put("description",productRequest.getDescription());
 
         Date now = new Date();
-        map.put("created_date",now);
-        map.put("last_modified_date",now);
+        map.put("createdDate",now);
+        map.put("lastModifiedDate",now);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -82,5 +82,14 @@ public class ProductDaoImpl implements ProductDao {
 
         map.put("lastModifiedDate",new Date());
         namedParameterJdbcTemplate.update(sql,new  MapSqlParameterSource(map));
+    }
+
+    @Override
+    public void deleteProductById(Integer productId) {
+        String sql="DELETE From product WHERE product_id= :productId";
+        Map<String,Object> map = new HashMap<>();
+        map.put("productId",productId);
+
+        namedParameterJdbcTemplate.update(sql,new MapSqlParameterSource(map));
     }
 }
