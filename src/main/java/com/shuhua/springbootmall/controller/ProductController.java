@@ -1,5 +1,6 @@
 package com.shuhua.springbootmall.controller;
 
+import com.shuhua.springbootmall.constant.ProductCategory;
 import com.shuhua.springbootmall.dto.ProductRequest;
 import com.shuhua.springbootmall.model.Product;
 import com.shuhua.springbootmall.service.ProductService;
@@ -18,9 +19,12 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProduct() {
-        List<Product> productList=productService.getProducts();
-        return ResponseEntity.ok().body(productList);
+    public ResponseEntity<List<Product>> getProduct(
+            @RequestParam(name="category", required = false) ProductCategory category,
+            @RequestParam(name="search",required = false) String search
+    ) {
+        List<Product> productList=productService.getProducts(category, search);
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 
 

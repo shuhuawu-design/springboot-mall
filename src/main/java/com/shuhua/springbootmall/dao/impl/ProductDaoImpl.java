@@ -1,5 +1,6 @@
 package com.shuhua.springbootmall.dao.impl;
 
+import com.shuhua.springbootmall.constant.ProductCategory;
 import com.shuhua.springbootmall.dao.ProductDao;
 import com.shuhua.springbootmall.dto.ProductRequest;
 import com.shuhua.springbootmall.model.Product;
@@ -23,11 +24,24 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category, String search) {
+
         String sql ="Select product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, " +
-                "last_modified_date From product";
+                "last_modified_date From product WHERE 1=1";
+
         Map<String,Object> map = new HashMap<>();
+
+        if(category != null){
+            sql = sql+ " AND category = :category";
+            map.put("category",category.name());
+        }
+
+        if(search != null){
+            sql = sql+ " AND product_name LIKE :search";
+            map.put("search", "%" + search + "%");
+        }
+
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
     }
