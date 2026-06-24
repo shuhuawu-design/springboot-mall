@@ -1,6 +1,5 @@
 package com.shuhua.springbootmall.dao.impl;
 
-import com.shuhua.springbootmall.constant.ProductCategory;
 import com.shuhua.springbootmall.dao.ProductDao;
 import com.shuhua.springbootmall.dto.ProductQueryParams;
 import com.shuhua.springbootmall.dto.ProductRequest;
@@ -42,6 +41,8 @@ public class ProductDaoImpl implements ProductDao {
             sql = sql+ " AND product_name LIKE :search";
             map.put("search", "%" + productQueryParams.getSearch() + "%");
         }
+
+        sql = sql +" ORDER BY "+ productQueryParams.getOrderBy() +" "+productQueryParams.getSort();
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
